@@ -135,7 +135,7 @@ bool scene_intersect(const Vec3f& orig, const Vec3f& dir, const vector<Sphere>& 
             checkerboard_dist = d;
             hit = pt;
             N = Vec3f(0, 1, 0);
-            material.diffuse_color = (int(0.5 * hit.x + 1000) + int(.5 * hit.z)) & 1 ? Vec3f(1, 1, 1) : Vec3f(1, .7, .3);
+            material.diffuse_color = (int(0.5 * hit.x + 1000) + int(.5 * hit.z)) & 1 ? Vec3f(1, 1, 1) : Vec3f(0, 0, 0);
             material.diffuse_color = material.diffuse_color * .3;
         }
     }
@@ -166,7 +166,7 @@ Vec3f cast_ray(const Vec3f &orig, const Vec3f &dir, const vector<Sphere>& sphere
     // 计算反射和折射起点
     Vec3f reflect_orig = reflect_dir * N < 0 ? point - N * 1e-3 : point + N * 1e-3;
     Vec3f refract_orig = refract_dir * N < 0 ? point - N * 1e-3 : point + N * 1e-3;
-    // 迭代进行光追
+    // 递归进行光追
     Vec3f reflect_color = cast_ray(reflect_orig, reflect_dir, spheres, lights, depth + 1);
     Vec3f refract_color = cast_ray(refract_orig, refract_dir, spheres, lights, depth + 1);
 
@@ -268,17 +268,21 @@ int main(int argc, char** argv) {
     Material      glass(1.5, Vec4f(0.0,  0.5, 0.1, 0.8), Vec3f(0.6, 0.7, 0.8),  125.); // 玻璃
     Material red_rubber(1.0, Vec4f(0.9,  0.1, 0.0, 0.0), Vec3f(0.3, 0.1, 0.1),   10.); // 红橡胶
     Material     mirror(1.0, Vec4f(0.0, 10.0, 0.8, 0.0), Vec3f(1.0, 1.0, 1.0), 1425.); // 镜子
+    Material   sapphire(1.7, Vec4f(0.6,  0.3, 0.5, 0.5), Vec3f(0.0, 0.0, 0.8),   25.); // 蓝宝石
     
     vector<Sphere> spheres;
     spheres.push_back(Sphere(Vec3f( 1.5, -0.5, -18), 3,      ivory));   // 球1
     spheres.push_back(Sphere(Vec3f(-1.0, -1.5, -12), 2,      glass));   // 球2
     spheres.push_back(Sphere(Vec3f(-3,    0,   -16), 2,     mirror));   // 球3
     spheres.push_back(Sphere(Vec3f( 7,    5,   -18), 4,     mirror));   // 球4
+    spheres.push_back(Sphere(Vec3f( 0,    3,   -16), 1, red_rubber));   // 球5
+    spheres.push_back(Sphere(Vec3f(-7,    5,   -16), 2,   sapphire));   // 球5
     
     vector<Light> lights;
     lights.push_back(Light(Vec3f(-20, 20, 20), 1.5f));
     lights.push_back(Light(Vec3f( 30, 50, -25), 1.8f));
     lights.push_back(Light(Vec3f( 30, 20,  30), 1.7f));
+    lights.push_back(Light(Vec3f( -1,  8, -16), 3.0f));
 
     render(spheres, lights);
 
