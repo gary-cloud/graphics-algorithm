@@ -230,7 +230,23 @@ void render(const vector<Sphere>& spheres, vector<Light>& lights) {
 
 int main(int argc, char** argv) {
     int n = -1;
-    unsigned char* pixmap = stbi_load("./envmap.jpg", &envmap_width, &envmap_height, &n, 0);
+    unsigned char* pixmap = stbi_load("./wallhaven-3l828y_3840x2160.png", &envmap_width, &envmap_height, &n, 0);
+
+    if (n == 4) {
+        // 如果是 RGBA 图像，丢弃 Alpha 通道
+        unsigned char* rgbPixmap = new unsigned char[envmap_width * envmap_height * 3];
+        for (int i = 0; i < envmap_width * envmap_height; i++) {
+            rgbPixmap[i * 3 + 0] = pixmap[i * 4 + 0];  // Red
+            rgbPixmap[i * 3 + 1] = pixmap[i * 4 + 1];  // Green
+            rgbPixmap[i * 3 + 2] = pixmap[i * 4 + 2];  // Blue
+        }
+
+        stbi_image_free(pixmap);
+
+        pixmap = rgbPixmap;
+        n = 3;
+    }
+
     if (!pixmap || n != 3)
     {
         cerr << "Error: can not load the environment map" << endl;
@@ -254,10 +270,10 @@ int main(int argc, char** argv) {
     Material     mirror(1.0, Vec4f(0.0, 10.0, 0.8, 0.0), Vec3f(1.0, 1.0, 1.0), 1425.); // 镜子
     
     vector<Sphere> spheres;
-    spheres.push_back(Sphere(Vec3f(-3,    0,   -16), 2,      ivory));
-    spheres.push_back(Sphere(Vec3f(-1.0, -1.5, -12), 2,      glass));
-    spheres.push_back(Sphere(Vec3f( 1.5, -0.5, -18), 3, red_rubber));
-    spheres.push_back(Sphere(Vec3f( 7,    5,   -18), 4,     mirror));
+    spheres.push_back(Sphere(Vec3f( 1.5, -0.5, -18), 3,      ivory));   // 球1
+    spheres.push_back(Sphere(Vec3f(-1.0, -1.5, -12), 2,      glass));   // 球2
+    spheres.push_back(Sphere(Vec3f(-3,    0,   -16), 2,     mirror));   // 球3
+    spheres.push_back(Sphere(Vec3f( 7,    5,   -18), 4,     mirror));   // 球4
     
     vector<Light> lights;
     lights.push_back(Light(Vec3f(-20, 20, 20), 1.5f));
