@@ -198,8 +198,8 @@ Vec3f cast_ray(const Vec3f &orig, const Vec3f &dir, const vector<Sphere>& sphere
 }
 
 void render(const vector<Sphere>& spheres, vector<Light>& lights) {
-    const int width    = 1024;
-    const int height   = 768;
+    const int width    = 1920;
+    const int height   = 1080;
     const int fov      = M_PI/3.;
     vector<Vec3f> framebuffer(width*height);
 
