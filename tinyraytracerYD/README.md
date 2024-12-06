@@ -22,6 +22,8 @@ g++
 
 ```bash
 g++ tinyraytracer.cpp -o main
+# 使用 -fopenmp 开启 OpenMP 优化。
+g++ -fopenmp tinyraytracer.cpp -o main
 ./main
 ```
 
