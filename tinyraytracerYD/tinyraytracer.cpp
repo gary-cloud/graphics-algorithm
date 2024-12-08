@@ -230,7 +230,7 @@ void render(const vector<Sphere>& spheres, vector<Light>& lights) {
 
 int main(int argc, char** argv) {
     int n = -1;
-    unsigned char* pixmap = stbi_load("./wallhaven-3l828y_3840x2160.png", &envmap_width, &envmap_height, &n, 0);
+    unsigned char* pixmap = stbi_load("./wallhaven-4owgm9_3840x2160.png", &envmap_width, &envmap_height, &n, 0);
 
     if (n == 4) {
         // 如果是 RGBA 图像，丢弃 Alpha 通道
